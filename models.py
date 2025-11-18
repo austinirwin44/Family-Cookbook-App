@@ -95,7 +95,32 @@ class Recipe:
         }
 
     @staticmethod
-    def from_csv() -> 'Recipe':
-        pass
-    
-    
+    def from_comma_separated(
+        recipe_name: str,
+        author: str,
+        tags_csv: str,
+        ingredients_csv: str,
+        instructions_csv: str,
+        prep_time: int,
+        photo: Optional[str] = None,
+    ) -> 'Recipe':
+        """
+        creates a Recipe object from strings, rather than lists of strings
+        """
+        def split_comma_separated(s: str) -> list[str]:
+            if s is None:
+                return []
+            return [part.strip() for part in s.split(',') if part.strip()]
+        
+        tags = split_comma_separated(tags_csv)
+        ingredients = split_comma_separated(ingredients_csv)
+        instructions = split_comma_separated(instructions_csv)
+        return Recipe(
+            recipe_name=recipe_name,
+            author=author,
+            tags=tags,
+            ingredients=ingredients,
+            instructions=instructions,
+            prep_time=prep_time,
+            photo=photo
+        )
