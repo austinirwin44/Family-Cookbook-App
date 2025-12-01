@@ -14,7 +14,6 @@ class Recipe:
     - ingredients: list of ingredient strings
     - instructions: list of instruction strings 
     - prep_time: prep time in minues (int)
-    - photo: optional filename (str or None)
     """
     def __init__(
         self, 
@@ -25,7 +24,6 @@ class Recipe:
         instructions: List[str], 
         prep_time: int,
         recipe_id: Optional[str] = None, # this type hint 'Optional' is here as you don't have to specify an id when you create a Recipe object  
-        photo: Optional[str] = None, # this type hint 'Optional' is here because you don't have to include a photo, photo=None if you don't include one
     ):
         self.id = recipe_id or str(uuid.uuid4()) # use recipe_id if it is provided, otherwise create a unique one
         self.recipe_name = recipe_name.strip()
@@ -33,8 +31,7 @@ class Recipe:
         self.tags = [t.strip() for t in tags if t is not None and t != ""] # removes whitespace, empty and null entries                 
         self.ingredients = [i.strip() for i in ingredients if i is not None and i != ""]       
         self.instructions = [s.strip() for s in instructions if s is not None and s != ""]   
-        self.prep_time = prep_time   
-        self.photo = photo    
+        self.prep_time = prep_time      
 
     def __repr__(self):
         return f'<Recipe {self.recipe_name!r} by {self.author!r}>'   
@@ -53,12 +50,10 @@ class Recipe:
         """
         displays the entire recipe in large format for readability 
         """
-        photo_line = f'Photo: {self.photo}\n' if self.photo else ""
         ingredients_str = '\n'.join(self.ingredients) if self.ingredients else 'no ingredients listed'
         instructions_str = '\n'.join(self.instructions) if self.instructions else 'no instructions listed'
         return (
             f'{self.recipe_name}\nby {self.author} - {self.prep_time} minute prep\n'
-            f'{photo_line}'
             f'Ingredients:\n{ingredients_str}'
             f'\n\nInstructions:\n{instructions_str}'
         )
@@ -76,7 +71,6 @@ class Recipe:
             instructions=data.get('instructions', []) or [],
             prep_time=data.get('prep_time', 0),
             recipe_id=data.get('id'),
-            photo=data.get('photo'),
         )
 
     def to_dict(self) -> dict:
@@ -91,7 +85,6 @@ class Recipe:
             'ingredients': self.ingredients,
             'instructions': self.instructions,
             'prep_time': self.prep_time,
-            'photo': self.photo,
         }
 
     @staticmethod
@@ -102,7 +95,6 @@ class Recipe:
         ingredients_csv: str,
         instructions_csv: str,
         prep_time: int,
-        photo: Optional[str] = None,
     ) -> 'Recipe':
         """
         creates a Recipe object from strings, rather than lists of strings
@@ -121,6 +113,5 @@ class Recipe:
             tags=tags,
             ingredients=ingredients,
             instructions=instructions,
-            prep_time=prep_time,
-            photo=photo
+            prep_time=prep_time
         )
