@@ -25,6 +25,23 @@ def load_all_recipes() -> List[Recipe]:
                 data = json.load(f)
             recipes.append(Recipe.from_dict(data))
         except:
-
+            # in case try block fails, exception will be raised and then continue to next block
             continue
     return recipes
+
+def load_recipe(recipe_id: str) -> Optional[Recipe]:
+    """Load a single recipe by id, or return None if it doesn't exist"""
+    _ensure_data_dir()
+    path = _get_recipe_path(recipe_id)
+    if not path.exists():
+        return None
+    with path.open('r', encoding='utf-8') as f:
+        data = json.load(f)
+    return Recipe.from_dict(data)
+
+def save_recipe(recipe: Recipe) -> None:
+    """Save (create or update) a recipe to its JSON file"""
+    _ensure_data_dir()
+    path = _get_recipe_path(recipe.id)
+    with path.open('w', encoding='utf-8') as f:
+        json.dump(recipe.to_dict(), f, ensure_ascii=False, indent=2)
