@@ -61,3 +61,24 @@ def filter_recipes(recipes: List[Recipe], query: Optional[str], selected_tags: L
     return filtered
 
 
+def textarea_to_list(text: str) -> List[str]:
+    """
+    convert a multiline textarea string into a clean list of strings
+    - split on new lines 
+    - strip whitespace
+    - remove empty lines
+    """
+    if not text:
+        return []
+    
+    lines = text.splitlines()
+    cleaned = [line.strip() for line in lines if line.strip()]
+    return cleaned
+
+def list_to_textarea(items: List[str]) -> str: 
+    """
+    convert a list of strings into a multiline string for display on the app
+    """
+    if not items:
+        return ''
+    return "\n".join(items)
